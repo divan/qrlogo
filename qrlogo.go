@@ -2,10 +2,11 @@ package qrlogo
 
 import (
 	"bytes"
-	qr "github.com/skip2/go-qrcode"
 	"image"
 	"image/color"
 	"image/png"
+
+	qr "github.com/skip2/go-qrcode"
 )
 
 // Encoder defines settings for QR/Overlay encoder.
@@ -60,7 +61,7 @@ func (e Encoder) overlayLogo(dst, src image.Image) {
 				if r > grey && g > grey && b > grey {
 					col = color.White
 				}
-				dst.(*image.RGBA).Set(x+offset, y+offset, col)
+				dst.(*image.Paletted).Set(x+offset, y+offset, col)
 			}
 		}
 	}

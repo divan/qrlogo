@@ -14,6 +14,7 @@ type Encoder struct {
 	AlphaThreshold int
 	GreyThreshold  int
 	QRLevel        qr.RecoveryLevel
+	KeepColor      bool
 }
 
 // DefaultEncoder is the encoder with default settings.
@@ -21,6 +22,7 @@ var DefaultEncoder = Encoder{
 	AlphaThreshold: 2000,       // FIXME: don't remember where this came from
 	GreyThreshold:  30,         // in percent
 	QRLevel:        qr.Highest, // recommended, as logo steals some redundant space
+	KeepColor:      true,       // keep the color of logo
 }
 
 // Encode encodes QR image, adds logo overlay and renders result as PNG.
@@ -38,7 +40,13 @@ func (e Encoder) Encode(str string, logo image.Image, size int) (*bytes.Buffer, 
 	}
 
 	img := code.Image(size)
-	e.overlayLogo(img, logo)
+
+	if e.KeepColor {
+		img = PalettedToRGBA(img.(*image.Paletted))
+		e.overlayOriginalLogo(img, logo)
+	} else {
+		e.overlayLogo(img, logo)
+	}
 
 	err = png.Encode(&buf, img)
 	if err != nil {
@@ -65,4 +73,27 @@ func (e Encoder) overlayLogo(dst, src image.Image) {
 			}
 		}
 	}
+}
+
+// overlayOriginalLogo blends logo to the center of the QR code,
+// keep colors.
+func (e Encoder) overlayOriginalLogo(dst, src image.Image) {
+	offset := dst.Bounds().Max.X/2 - src.Bounds().Max.X/2
+	for x := 0; x < src.Bounds().Max.X; x++ {
+		for y := 0; y < src.Bounds().Max.Y; y++ {
+			dst.(*image.RGBA).Set(x+offset, y+offset, src.At(x, y))
+		}
+	}
+}
+
+// PalettedToRGBA convert platted to rgba
+func PalettedToRGBA(src *image.Paletted) *image.RGBA {
+	dst := image.NewRGBA(src.Bounds())
+	for x := 0; x < src.Bounds().Max.X; x++ {
+		for y := 0; y < src.Bounds().Max.Y; y++ {
+			dst.Set(x, y, src.At(x, y))
+		}
+	}
+
+	return dst
 }

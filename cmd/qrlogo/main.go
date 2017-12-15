@@ -3,15 +3,17 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/divan/qrlogo"
 	"image"
 	_ "image/png"
 	"os"
+
+	"github.com/divan/qrlogo"
 )
 
 var (
 	input  = flag.String("i", "logo.png", "Logo to be placed over QR code")
 	output = flag.String("o", "qr.png", "Output filename")
+	keep   = flag.Bool("k", true, "keep the color of logo")
 	size   = flag.Int("size", 512, "Image size in pixels")
 )
 
@@ -32,6 +34,8 @@ func main() {
 
 	logo, _, err := image.Decode(file)
 	errcheck(err, "Failed to decode PNG with logo:")
+
+	qrlogo.DefaultEncoder.KeepColor = *keep
 
 	qr, err := qrlogo.Encode(text, logo, *size)
 	errcheck(err, "Failed to encode QR:")

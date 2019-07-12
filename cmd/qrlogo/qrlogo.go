@@ -1,4 +1,4 @@
-package qrlogo
+package main
 
 import (
 	"bytes"
@@ -24,7 +24,12 @@ var DefaultEncoder = Encoder{
 }
 
 // Encode encodes QR image, adds logo overlay and renders result as PNG.
-func Encode(str string, logo image.Image, size int) (*bytes.Buffer, error) {
+func Encode(str string, logo image.Image, size int, withColor bool) (*bytes.Buffer, error) {
+
+	if withColor == true {
+		return DefaultEncoder.EncodeColor(str, logo, size)
+	}
+
 	return DefaultEncoder.Encode(str, logo, size)
 }
 

@@ -1,5 +1,6 @@
 # QRLogo
-[![GoDoc](https://godoc.org/github.com/divan/qrlogo?status.svg)](https://godoc.org/github.com/divan/qrlogo)
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/divan/qrlogo)
+
 
 ## Intro
 QRLogo is a small library and command line to generate QR images with small logo placed in the center.

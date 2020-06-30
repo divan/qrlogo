@@ -28,6 +28,8 @@ Output will be written to qr.png file in PNG format.
 
 You can also specify output filename and image size (512px by default). See `-help` output for details.
 
+Also there is an option to enable color
+
 Note, that resizing logo image is up to you, it will be placed on top of resulting QR code without resizing or guessing proportions.
 
 ### Library

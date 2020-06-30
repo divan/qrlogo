@@ -10,9 +10,10 @@ import (
 )
 
 var (
-	input  = flag.String("i", "logo.png", "Logo to be placed over QR code")
-	output = flag.String("o", "qr.png", "Output filename")
-	size   = flag.Int("size", 512, "Image size in pixels")
+	input     = flag.String("i", "logo.png", "Logo to be placed over QR code")
+	output    = flag.String("o", "qr.png", "Output filename")
+	size      = flag.Int("size", 512, "Image size in pixels")
+	withColor = flag.Bool("t", false, "\nUse logo with color")
 )
 
 func main() {
@@ -33,7 +34,7 @@ func main() {
 	logo, _, err := image.Decode(file)
 	errcheck(err, "Failed to decode PNG with logo:")
 
-	qr, err := qrlogo.Encode(text, logo, *size)
+	qr, err := Encode(text, logo, *size, *withColor)
 	errcheck(err, "Failed to encode QR:")
 
 	out, err := os.Create(*output)

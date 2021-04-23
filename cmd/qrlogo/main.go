@@ -1,53 +1,49 @@
 package main
 
+import "C"
 import (
-	"flag"
+	"bytes"
 	"fmt"
-	"github.com/divan/qrlogo"
 	"image"
 	_ "image/png"
 	"os"
-)
 
-var (
-	input  = flag.String("i", "logo.png", "Logo to be placed over QR code")
-	output = flag.String("o", "qr.png", "Output filename")
-	size   = flag.Int("size", 512, "Image size in pixels")
+	"github.com/divan/qrlogo"
 )
 
 func main() {
-	flag.Usage = Usage
-	flag.Parse()
+}
 
-	if flag.NArg() != 1 {
-		flag.Usage()
-		os.Exit(1)
-	}
+// the "export"-declaration are required
 
-	text := flag.Arg(0)
+//export CreateQrCode
+func CreateQrCode(qrCodeString string, qrCodePath string, qrCodeSize int) {
+	qr, err := qrlogo.Encode(qrCodeString, nil, qrCodeSize)
+	errcheck(err, "Failed to encode QR:")
 
-	file, err := os.Open(*input)
+	writeFile(*qr, qrCodePath)
+}
+
+//export CreateQrCodeWithLogo
+func CreateQrCodeWithLogo(qrCodeString string, qrCodePath string, overlayLogoPath string, qrCodeSize int) {
+	file, err := os.Open(overlayLogoPath)
 	errcheck(err, "Failed to open logo:")
 	defer file.Close()
 
 	logo, _, err := image.Decode(file)
 	errcheck(err, "Failed to decode PNG with logo:")
 
-	qr, err := qrlogo.Encode(text, logo, *size)
+	qr, err := qrlogo.Encode(qrCodeString, logo, qrCodeSize)
 	errcheck(err, "Failed to encode QR:")
 
-	out, err := os.Create(*output)
-	errcheck(err, "Failed to open output file:")
-	out.Write(qr.Bytes())
-	out.Close()
-
-	fmt.Println("Done! Written QR image to", *output)
+	writeFile(*qr, qrCodePath)
 }
 
-// Usage overloads flag.Usage.
-func Usage() {
-	fmt.Fprintln(os.Stderr, "Usage: qrlogo [options] text")
-	flag.PrintDefaults()
+func writeFile(qrCode bytes.Buffer, qrCodePath string) {
+	out, err := os.Create(qrCodePath)
+	errcheck(err, "Failed to open output file:")
+	out.Write(qrCode.Bytes())
+	out.Close()
 }
 
 func errcheck(err error, str string) {

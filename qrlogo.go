@@ -1,5 +1,7 @@
 package qrlogo
 
+import "C"
+
 import (
 	"bytes"
 	"image"
@@ -38,7 +40,10 @@ func (e Encoder) Encode(str string, logo image.Image, size int) (*bytes.Buffer, 
 	}
 
 	img := code.Image(size)
-	e.overlayLogo(img, logo)
+
+	if logo != nil {
+		e.overlayLogo(img, logo)
+	}
 
 	err = png.Encode(&buf, img)
 	if err != nil {

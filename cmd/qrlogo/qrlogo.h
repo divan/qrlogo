@@ -19,6 +19,10 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
+#line 3 "main.go"
+ #include <stdlib.h>
+
+#line 1 "cgo-generated-wrapper"
 
 
 /* End of preamble from import "C" comments.  */
@@ -69,7 +73,10 @@ extern "C" {
 #endif
 
 extern void CreateQrCode(GoString qrCodeString, GoString qrCodePath, GoInt qrCodeSize);
+extern char* CreateQrCodeAsBase64String(GoString qrCodeString, GoInt qrCodeSize);
 extern void CreateQrCodeWithLogo(GoString qrCodeString, GoString qrCodePath, GoString overlayLogoPath, GoInt qrCodeSize);
+extern char* CreateQrCodeWithLogoAsBase64String(GoString qrCodeString, GoString overlayLogoPath, GoInt qrCodeSize);
+extern void FreeUnsafePointer(char* cPointer);
 
 #ifdef __cplusplus
 }

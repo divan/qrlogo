@@ -1,7 +1,5 @@
 package qrlogo
 
-import "C"
-
 import (
 	"bytes"
 	"image"

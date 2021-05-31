@@ -18,9 +18,9 @@ type Encoder struct {
 
 // DefaultEncoder is the encoder with default settings.
 var DefaultEncoder = Encoder{
-	AlphaThreshold: 2000,       // FIXME: don't remember where this came from
-	GreyThreshold:  30,         // in percent
-	QRLevel:        qr.Highest, // recommended, as logo steals some redundant space
+	AlphaThreshold: 2000,      // FIXME: don't remember where this came from
+	GreyThreshold:  30,        // in percent
+	QRLevel:        qr.Medium, // Better would be 'Highest', as logo steals some redundant space - but we need Medium
 }
 
 // Encode encodes QR image, adds logo overlay and renders result as PNG.

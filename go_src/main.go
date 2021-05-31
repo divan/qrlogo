@@ -11,8 +11,11 @@ import (
 
 	"os"
 
-	"github.com/divan/qrlogo"
+	qrlogo "github.com/garaio/qrlogo/package"
 )
+
+func main() {
+}
 
 // the "export"-declaration are required
 
@@ -75,7 +78,4 @@ func errcheck(err error, str string) {
 		fmt.Println(str, err)
 		os.Exit(1)
 	}
-}
-
-func main() {
 }

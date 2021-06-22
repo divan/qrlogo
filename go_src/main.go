@@ -24,6 +24,7 @@ func main() {
 func CreateQrCode(qrCodeString string, qrCodePath string, qrCodeSize int) {
 	// wir muessen den gc abschalten da go sonst schneller aufrauemt wie ffi
 	debug.SetGCPercent(-1)
+	defer debug.SetGCPercent(100)
 	qr, err := qrlogo.Encode(qrCodeString, nil, qrCodeSize)
 	errcheck(err, "Failed to encode QR:")
 	writeFileToFilesystem(*qr, qrCodePath)
@@ -33,6 +34,7 @@ func CreateQrCode(qrCodeString string, qrCodePath string, qrCodeSize int) {
 func CreateQrCodeAsBase64String(qrCodeString string, qrCodeSize int) *C.char {
 	// wir muessen den gc abschalten da go sonst schneller aufrauemt wie ffi
 	debug.SetGCPercent(-1)
+	defer debug.SetGCPercent(100)
 	qr, err := qrlogo.Encode(qrCodeString, nil, qrCodeSize)
 	errcheck(err, "Failed to encode QR:")
 	base64String := base64.StdEncoding.EncodeToString(qr.Bytes())
@@ -43,6 +45,7 @@ func CreateQrCodeAsBase64String(qrCodeString string, qrCodeSize int) *C.char {
 func CreateQrCodeWithLogo(qrCodeString string, qrCodePath string, overlayLogoPath string, qrCodeSize int) {
 	// wir muessen den gc abschalten da go sonst schneller aufrauemt wie ffi
 	debug.SetGCPercent(-1)
+	defer debug.SetGCPercent(100)
 	qr := qrCodeWithLogo(qrCodeString, overlayLogoPath, qrCodeSize)
 	writeFileToFilesystem(*qr, qrCodePath)
 }
@@ -51,6 +54,7 @@ func CreateQrCodeWithLogo(qrCodeString string, qrCodePath string, overlayLogoPat
 func CreateQrCodeWithLogoAsBase64String(qrCodeString string, overlayLogoPath string, qrCodeSize int) *C.char {
 	// wir muessen den gc abschalten da go sonst schneller aufrauemt wie ffi
 	debug.SetGCPercent(-1)
+	defer debug.SetGCPercent(100)
 	qr := qrCodeWithLogo(qrCodeString, overlayLogoPath, qrCodeSize)
 	base64String := base64.StdEncoding.EncodeToString(qr.Bytes())
 	return C.CString(base64String)
@@ -60,6 +64,7 @@ func CreateQrCodeWithLogoAsBase64String(qrCodeString string, overlayLogoPath str
 func FreeUnsafePointer(cPointer *C.char) {
 	// wir muessen den gc abschalten da go sonst schneller aufrauemt wie ffi
 	debug.SetGCPercent(-1)
+	defer debug.SetGCPercent(100)
 	C.free(unsafe.Pointer(cPointer))
 }
 

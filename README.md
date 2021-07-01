@@ -15,3 +15,10 @@ Clone folder, change into root-directory and type in console:
 ## License
 
 MIT
+
+## Current Issues
+
+https://github.com/golang/go/issues/42190
+https://github.com/golang/go/issues/43836
+
+

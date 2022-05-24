@@ -53,7 +53,8 @@ func (e Encoder) Encode(str string, logo image.Image, size int) (*bytes.Buffer, 
 func (e Encoder) overlayLogo(dst, src image.Image) {
 	grey := uint32(^uint16(0)) * uint32(e.GreyThreshold) / 100
 	alphaOffset := uint32(e.AlphaThreshold)
-	offset := dst.Bounds().Max.X/2 - src.Bounds().Max.X/2
+	offsetX := dst.Bounds().Max.X/2 - src.Bounds().Max.X/2
+	offsetY := dst.Bounds().Max.Y/2 - src.Bounds().Max.Y/2
 	for x := 0; x < src.Bounds().Max.X; x++ {
 		for y := 0; y < src.Bounds().Max.Y; y++ {
 			if r, g, b, alpha := src.At(x, y).RGBA(); alpha > alphaOffset {
@@ -61,7 +62,7 @@ func (e Encoder) overlayLogo(dst, src image.Image) {
 				if r > grey && g > grey && b > grey {
 					col = color.White
 				}
-				dst.(*image.Paletted).Set(x+offset, y+offset, col)
+				dst.(*image.Paletted).Set(x+offsetX, y+offsetY, col)
 			}
 		}
 	}
